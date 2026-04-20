@@ -8,7 +8,6 @@ declare(strict_types=1);
  * Self-updating: Can parse official SWIFT iban-registry-v{version}.txt to update its own source. 
  * https://www.swift.com/standards/data-standards/iban-international-bank-account-number#topic-tabs-menu
  * 
- * @author panariga <panariga@gmail.com>
  */
 class IbanTools
 {
