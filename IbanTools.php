@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
+
 /**
  * Copyright (c) 2026 Panariga, All rights reserved.
  * Comprehensive IBAN validator and utility class.
  * Self-updating: Can parse official SWIFT iban-registry-v{version}.txt to update its own source. 
  * https://www.swift.com/standards/data-standards/iban-international-bank-account-number#topic-tabs-menu
  * 
+ * @author panariga <panariga@gmail.com>
  */
 class IbanTools
 {
@@ -442,7 +444,7 @@ class IbanTools
     public static function updateRegistry(string $txtFilePath): void
     {
         if (!file_exists($txtFilePath)) {
-            throw new RuntimeException("Registry file not found: $txtFilePath");
+            throw new \RuntimeException("Registry file not found: $txtFilePath");
         }
 
         $raw_data = file_get_contents($txtFilePath);
@@ -465,7 +467,7 @@ class IbanTools
 
         $countries = $registry['IBAN prefix country code (ISO 3166)'] ?? [];
         if (empty($countries)) {
-            throw new RuntimeException("Could not find country codes in TSV. Ensure you have the raw SWIFT IBAN_Registry.txt.");
+            throw new \RuntimeException("Could not find country codes in TSV. Ensure you have the raw SWIFT IBAN_Registry.txt.");
         }
 
         $newRegistryBlocks = [];
@@ -532,7 +534,7 @@ class IbanTools
         ksort($newRegistryBlocks);
         $newRegistryString = "[\n" . implode("\n", $newRegistryBlocks) . "\n    ]";
 
-        $classFile = (new ReflectionClass(self::class))->getFileName();
+        $classFile = (new \ReflectionClass(self::class))->getFileName();
         $content = file_get_contents($classFile);
         $startToken = 'private const REGISTRY = [';
         $endToken = '    ];';
@@ -544,7 +546,7 @@ class IbanTools
             file_put_contents($classFile, $updatedContent);
             echo "✅ Successfully synced " . count($newRegistryBlocks) . " countries and updated " . basename($classFile) . "!\n";
         } else {
-            throw new RuntimeException("Failed to locate REGISTRY array block in source file.");
+            throw new \RuntimeException("Failed to locate REGISTRY array block in source file.");
         }
     }
 
